@@ -68,7 +68,7 @@ const PlatformIcon = styled.Image`
 `;
 
 const Platform = styled.Text`
-  font-size: 12px;
+  font-size: 14px;
   color: ${({ theme }) => theme.textSecondary};
 `;
 

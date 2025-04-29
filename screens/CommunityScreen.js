@@ -1,16 +1,47 @@
 import React from "react";
-import { Text } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import ScreenWrapper from "../components/ScreenWrapper";
-import { useTheme } from "styled-components/native";
+import Header from "../components/Header";
+import PostCard from "../components/PostCard";
+import FilterBar from "../components/FilterBar";
 
-const StoreScreen = () => {
-  const theme = useTheme();
-
+const CommunityScreen = () => {
   return (
     <ScreenWrapper>
-      <Text style={{ color: theme.text, fontSize: 24 }}>Community</Text>
+     <Header title="Community" showSearch={false} />
+      <View style={{ paddingHorizontal: 12 }}>
+        <Text style={{ color: "#A0A0A0", fontSize: 16,marginBottom: 30 }}>
+          Community and official content for all games and software
+        </Text>
+      </View>
+      <FilterBar />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <PostCard
+          author="Eurogamer"
+          isNews={true}
+          time="yesterday • 2:20 pm"
+          title="Florida tourist attraction sues Fortnite, seeks removal of in-game castle"
+          description="Coral Castle Museum, a tourist attraction near Miami, is suing Fortnite maker Epic Games for trademark infringement and unfair competition."
+          image={require("../assets/images/kingdom_come.png")}
+          avatar={require("../assets/images/eurogamer.png")}
+          likes={324}
+          comments={12}
+        />
+         <PostCard
+          author="Eurogamer"
+          isNews={true}
+          time="yesterday • 2:20 pm"
+          title="Florida tourist attraction sues Fortnite, seeks removal of in-game castle"
+          description="Coral Castle Museum, a tourist attraction near Miami, is suing Fortnite maker Epic Games for trademark infringement and unfair competition."
+          image={require("../assets/images/kingdom_come.png")}
+          avatar={require("../assets/images/eurogamer.png")}
+          likes={324}
+          comments={12}
+        />
+        
+      </ScrollView>
     </ScreenWrapper>
   );
 };
 
-export default StoreScreen;
+export default CommunityScreen;

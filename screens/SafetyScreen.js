@@ -1,16 +1,16 @@
 import React from "react";
-import { Text } from "react-native";
-import ScreenWrapper from "../components/ScreenWrapper";
-import { useTheme } from "styled-components/native";
+import { View, Text, Button } from "react-native";
+import { useTheme } from "../theme/ThemeContext";
 
-const StoreScreen = () => {
-  const theme = useTheme();
+const ProfileScreen = () => {
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <ScreenWrapper>
-      <Text style={{ color: theme.text, fontSize: 24 }}>Safety</Text>
-    </ScreenWrapper>
+    <View style={{ flex: 1, backgroundColor: theme.background, padding: 20 }}>
+      <Text style={{ color: theme.text, fontSize: 24 }}>Safery</Text>
+      <Button title="Toggle Theme" onPress={toggleTheme} />
+    </View>
   );
 };
 
-export default StoreScreen;
+export default ProfileScreen;

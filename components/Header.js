@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "styled-components/native";
 
-const Header = ({ title }) => {
+const Header = ({ title, showSearch }) => {
   const theme = useTheme();
 
   return (
@@ -14,9 +14,11 @@ const Header = ({ title }) => {
         resizeMode="contain"
       />
       <Text style={[styles.title, { color: theme.text }]}>{title}</Text>
-      <TouchableOpacity>
-        <Ionicons name="search" size={24} color={theme.text} />
-      </TouchableOpacity>
+      {showSearch && (
+        <TouchableOpacity>
+          <Ionicons name="search" size={24} color={theme.text} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "400",
     color: "white",
-    marginLeft: 12, 
+    marginLeft: 12,
     flex: 1,
   },
 });

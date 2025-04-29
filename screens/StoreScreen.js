@@ -9,7 +9,7 @@ const StoreScreen = () => {
   return (
     <Container>
       <ScrollView>
-        <Header title="Store" />
+      <Header title="Store" showSearch={true} />
         <GameCard
           title="Dead by Daylight"
           subtitle="Recommended by your friend, Player"
