@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, Button } from 'react-native';
-import { useTheme } from '../theme/ThemeContext';
+import React from "react";
+import { View, Text, Button } from "react-native";
+import { useTheme } from "../theme/ThemeContext";
 
 const ProfileScreen = () => {
   const { theme, toggleTheme } = useTheme();
