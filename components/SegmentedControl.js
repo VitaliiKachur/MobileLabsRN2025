@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useTheme } from "styled-components/native";
 
-const SegmentedControl = ({ options = ["Open chats", "My friends"] }) => {
+const SegmentedControl = ({ options = ["Open chats", "My friends"], selectedIndex, onChange }) => {
   const theme = useTheme();
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [localSelectedIndex, setLocalSelectedIndex] = useState(selectedIndex || 0);
 
   const isDark = theme.mode === "dark"; 
+
+  const handlePress = (index) => {
+    setLocalSelectedIndex(index);
+    onChange && onChange(index); 
+  };
 
   return (
     <View
@@ -19,7 +24,7 @@ const SegmentedControl = ({ options = ["Open chats", "My friends"] }) => {
       ]}
     >
       {options.map((label, index) => {
-        const isActive = selectedIndex === index;
+        const isActive = localSelectedIndex === index;
 
         const backgroundColor = isActive
           ? theme.background
@@ -44,7 +49,7 @@ const SegmentedControl = ({ options = ["Open chats", "My friends"] }) => {
                 borderRightWidth: index < options.length - 1 ? 1 : 0,
               },
             ]}
-            onPress={() => setSelectedIndex(index)}
+            onPress={() => handlePress(index)}
           >
             <Text
               style={{

@@ -7,10 +7,12 @@ import SegmentedControl from "../components/SegmentedControl";
 
 const ChatScreen = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const options = ["Open chats", "My friends"];
   return (
     <ScreenWrapper>
     <Header title="Chat" showSearch={true} />
     <SegmentedControl
+      options={options}
       selected={selectedIndex}
       onChange={setSelectedIndex}
     />

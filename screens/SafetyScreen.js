@@ -1,16 +1,22 @@
-import React from "react";
-import { View, Text, Button } from "react-native";
-import { useTheme } from "../theme/ThemeContext";
+import React, { useState } from "react";
+import ScreenWrapper from "../components/ScreenWrapper";
+import Header from "../components/Header";
+import SegmentedControl from "../components/SegmentedControl";
 
-const ProfileScreen = () => {
-  const { theme, toggleTheme } = useTheme();
+const SaferyScreen = () => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const options = ["Guard", "Confirmations"]; 
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.background, padding: 20 }}>
-      <Text style={{ color: theme.text, fontSize: 24 }}>Safery</Text>
-      <Button title="Toggle Theme" onPress={toggleTheme} />
-    </View>
+    <ScreenWrapper>
+      <Header title="Safery" showSearch={false} />
+      <SegmentedControl
+        options={options} 
+        selectedIndex={selectedIndex} 
+        onChange={setSelectedIndex} 
+      />
+    </ScreenWrapper>
   );
 };
 
-export default ProfileScreen;
+export default SaferyScreen;
