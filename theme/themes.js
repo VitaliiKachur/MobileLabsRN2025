@@ -11,6 +11,7 @@ export const darkTheme = {
     filterInactive: "#303649",
     placeholderColor: "#A0A0A0",
     unreadBadge: "#1A8FFF",
+    card2: "#202532",
   };
   
   export const lightTheme = {
@@ -26,5 +27,6 @@ export const darkTheme = {
     filterInactive: "#F0F0F0",
     placeholderColor: "#888888",
     unreadBadge: "#1A8FFF",
+    card2: "#F1F1F1", 
   };
   
