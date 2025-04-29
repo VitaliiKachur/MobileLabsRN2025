@@ -1,16 +1,22 @@
 import React from "react";
-import { Text } from "react-native";
+import { useState } from "react";
 import ScreenWrapper from "../components/ScreenWrapper";
-import { useTheme } from "styled-components/native";
+import Header from "../components/Header";
+import ChatList from "../components/ChatList";
+import SegmentedControl from "../components/SegmentedControl";
 
-const StoreScreen = () => {
-  const theme = useTheme();
-
+const ChatScreen = () => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
   return (
     <ScreenWrapper>
-      <Text style={{ color: theme.text, fontSize: 24 }}>Chat</Text>
-    </ScreenWrapper>
+    <Header title="Chat" showSearch={true} />
+    <SegmentedControl
+      selected={selectedIndex}
+      onChange={setSelectedIndex}
+    />
+    <ChatList />
+  </ScreenWrapper>
   );
 };
 
-export default StoreScreen;
+export default ChatScreen;

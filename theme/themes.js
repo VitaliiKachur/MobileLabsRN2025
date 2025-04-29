@@ -6,11 +6,11 @@ export const darkTheme = {
     card: "#1E2029",
     secondaryText: "#AAAAAA",
     textSecondary: "rgb(170, 162, 162)",
-  
-    inputBackground: "#2A2A2E",
+    inputBackground: "#303649",
     filterActive: "#1A8FFF",
-    filterInactive: "#2A2A2E",
+    filterInactive: "#303649",
     placeholderColor: "#A0A0A0",
+    unreadBadge: "#1A8FFF",
   };
   
   export const lightTheme = {
@@ -21,10 +21,10 @@ export const darkTheme = {
     card: "#F0F0F0",
     secondaryText: "#555555",
     textSecondary: "rgb(100, 100, 100)",
-  
     inputBackground: "#E0E0E0",
     filterActive: "#1A8FFF",
     filterInactive: "#F0F0F0",
     placeholderColor: "#888888",
+    unreadBadge: "#1A8FFF",
   };
   
