@@ -12,7 +12,7 @@ const ProfileScreen = () => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.avatarContainer}>
           <Image
-            source={require("../assets/images/Bitmap.png")} 
+            source={require("../assets/images/profile.png")} 
             style={styles.avatar}
           />
           <View style={styles.onlineIndicator} />

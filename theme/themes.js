@@ -24,8 +24,8 @@ export const darkTheme = {
     textSecondary: "rgb(100, 100, 100)",
     inputBackground: "#E0E0E0",
     filterActive: "#1A8FFF",
-    filterInactive: "#F0F0F0",
-    placeholderColor: "#888888",
+    filterInactive: "rgb(165, 158, 158)",
+    placeholderColor: "rgb(35, 35, 48)",
     unreadBadge: "#1A8FFF",
     card2: "#F1F1F1", 
   };

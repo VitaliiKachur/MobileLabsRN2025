@@ -14,7 +14,7 @@ const CommunityScreen = () => {
           Community and official content for all games and software
         </Text>
       </View>
-      <FilterBar />
+      <FilterBar filters={["All", "Screenshots", "Artwork", "Workshop"]} searchEnabled />
       <ScrollView showsVerticalScrollIndicator={false}>
         <PostCard
           author="Eurogamer"

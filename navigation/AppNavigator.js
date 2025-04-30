@@ -6,7 +6,7 @@ import CommunityScreen from "../screens/CommunityScreen";
 import ChatScreen from "../screens/ChatScreen";
 import SafetyScreen from "../screens/SafetyScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import { View, Image } from "react-native";
+import { View, Image,StyleSheet, } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
@@ -51,8 +51,17 @@ const AppNavigator = () => {
               iconSource = require("../assets/images/message-circle.png");
             else if (route.name === "Safety")
               iconSource = require("../assets/images/shield (4).png");
-            else if (route.name === "Profile")
-              iconSource = require("../assets/images/Bitmap.png");
+            else if (route.name === "Profile") {
+              return (
+                <View>
+                  <Image
+                    source={require("../assets/images/profile.png")}
+                    style={styles.avatar}
+                  />
+                </View>
+              );
+            }
+       
 
             return (
               <CustomTabBarIcon
@@ -77,4 +86,22 @@ const AppNavigator = () => {
   );
 };
 
+const styles = StyleSheet.create({
+
+  avatar: {
+    marginTop: 30,
+    width: 30,
+    height: 30,
+    borderRadius: 50,
+  },
+
+
+});
+
+
+
+
+
+
 export default AppNavigator;
+

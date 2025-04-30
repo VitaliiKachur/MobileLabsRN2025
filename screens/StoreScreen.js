@@ -4,6 +4,7 @@ import styled, { useTheme } from "styled-components/native";
 import GameCard from "../components/GameCard";
 import GameListItem from "../components/GameListItem";
 import Header from "../components/Header";
+import FilterBar from "../components/FilterBar";
 
 const StoreScreen = () => {
   return (
@@ -18,15 +19,7 @@ const StoreScreen = () => {
           newPrice="$5"
           imageUrl={require("../assets/images/Bitmap1.png")}
         />
-
-        <FilterRow>
-          <FilterButton active>Top Sellers</FilterButton>
-          <FilterButton>Free to play</FilterButton>
-          <FilterButton>Early Access</FilterButton>
-        </FilterRow>
-
-        <SectionTitle>Top Sellers</SectionTitle>
-
+        <FilterBar filters={["Top Sellers", "Free to play", "Early Access"]} />
         <GameListItem
           title="Grand Theft Auto V"
           platform="Windows"

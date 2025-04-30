@@ -3,8 +3,7 @@ import { ScrollView, TouchableOpacity, Text, View, TextInput } from "react-nativ
 import { useTheme } from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 
-const FilterBar = () => {
-  const filters = ["All", "Screenshots", "Artwork", "Workshop"];
+const FilterBar = ({ filters = [], searchEnabled = false }) => {
   const [active, setActive] = useState(0);
   const theme = useTheme();
 
@@ -18,36 +17,35 @@ const FilterBar = () => {
         paddingVertical: 8,
       }}
     >
-      {/* Search Field */}
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          backgroundColor: theme.inputBackground,
-          borderRadius: 20,
-          paddingHorizontal: 10,
-          height: 32,
-          marginRight: 10,
-          minWidth: 10,
-          marginBottom: 20,
-          marginTop: 12,
-        }}
-      >
-        <Feather name="search" size={16} color={theme.placeholderColor} />
-        <TextInput
-          placeholder=""
-          placeholderTextColor={theme.placeholderColor}
+      {searchEnabled && (
+        <View
           style={{
-            marginLeft: 6,
-            color: theme.text,
-            fontSize: 11,
-            flex: 1,
-            paddingVertical: 0,
+            flexDirection: "row",
+            alignItems: "center",
+            backgroundColor: theme.inputBackground,
+            borderRadius: 10,
+            paddingHorizontal: 10,
+            height: 32,
+            marginRight: 10,
+            marginBottom: 20,
+            marginTop: 12,
           }}
-        />
-      </View>
+        >
+          <Feather name="search" size={16} color={theme.placeholderColor} />
+          <TextInput
+            placeholder=""
+            placeholderTextColor={theme.placeholderColor}
+            style={{
+              marginLeft: 6,
+              color: theme.text,
+              fontSize: 11,
+              flex: 1,
+              paddingVertical: 0,
+            }}
+          />
+        </View>
+      )}
 
-      {/* Filter Buttons */}
       {filters.map((filter, index) => {
         const isActive = index === active;
         return (
@@ -58,7 +56,7 @@ const FilterBar = () => {
               backgroundColor: isActive ? theme.filterActive : theme.filterInactive,
               paddingVertical: 6,
               paddingHorizontal: 16,
-              borderRadius: 20,
+              borderRadius: 10,
               marginRight: 8,
               height: 32,
               marginBottom: 20,
