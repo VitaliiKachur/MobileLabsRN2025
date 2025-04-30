@@ -9,7 +9,7 @@ const AuthCodeDisplay = ({ code = "N5KCV" }) => {
   return (
     <View style={styles.wrapper}>
       <ImageBackground
-       source={require("../assets/images/Group 4 (2).png")} 
+       source={require("../assets/images/Stroke 1.png")} 
         style={styles.imageBackground}
         resizeMode="cover"
       >

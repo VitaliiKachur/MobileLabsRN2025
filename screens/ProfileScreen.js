@@ -18,8 +18,8 @@ const ProfileScreen = () => {
           <View style={styles.onlineIndicator} />
         </View>
 
-        <Text style={[styles.name, { color: theme.text }]}>Firstname Lastname</Text>
-        <Text style={[styles.group, { color: theme.text }]}>Group</Text>
+        <Text style={[styles.name, { color: theme.text }]}>Kachur Vitalii</Text>
+        <Text style={[styles.group, { color: theme.text }]}>VTk-24-1</Text>
 
         <TouchableOpacity style={styles.toggleButton} onPress={toggleTheme}>
           <Text style={styles.toggleButtonText}>Toggle Theme</Text>

@@ -12,6 +12,9 @@ export const darkTheme = {
     placeholderColor: "#A0A0A0",
     unreadBadge: "#1A8FFF",
     card2: "#202532",
+    inputBackground2: "#303649",
+    background2: "#1C202C",
+    backgroundNavigator: "#12141C",
   };
   
   export const lightTheme = {
@@ -24,9 +27,12 @@ export const darkTheme = {
     textSecondary: "rgb(100, 100, 100)",
     inputBackground: "#E0E0E0",
     filterActive: "#1A8FFF",
-    filterInactive: "rgb(165, 158, 158)",
+    filterInactive: "rgb(202, 223, 188)",
     placeholderColor: "rgb(35, 35, 48)",
     unreadBadge: "#1A8FFF",
-    card2: "#F1F1F1", 
+    card2: "rgb(202, 223, 188)", 
+    inputBackground2: "rgb(77, 58, 58)",
+    background2:"rgb(145, 171, 194)",
+    backgroundNavigator: "rgb(179, 213, 243)",
   };
   

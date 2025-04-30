@@ -6,14 +6,13 @@ import CommunityScreen from "../screens/CommunityScreen";
 import ChatScreen from "../screens/ChatScreen";
 import SafetyScreen from "../screens/SafetyScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import { View, Image,StyleSheet, } from "react-native";
+import { View, Image, StyleSheet } from "react-native";
+import { useTheme } from "styled-components/native"; 
 
 const Tab = createBottomTabNavigator();
 
 const CustomTabBarIcon = ({ source, color, size, routeName }) => (
-  <View
-    style={{ alignItems: "center", justifyContent: "center", marginTop: 30 }}
-  >
+  <View style={{ alignItems: "center", justifyContent: "center", marginTop: 30 }}>
     <Image
       source={source}
       style={{
@@ -26,13 +25,15 @@ const CustomTabBarIcon = ({ source, color, size, routeName }) => (
 );
 
 const AppNavigator = () => {
+  const theme = useTheme();
+
   return (
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarStyle: {
-            backgroundColor: "#12141C",
+            backgroundColor: theme.backgroundNavigator, 
             borderTopWidth: 0,
             height: 70,
             paddingBottom: 10,
@@ -61,7 +62,6 @@ const AppNavigator = () => {
                 </View>
               );
             }
-       
 
             return (
               <CustomTabBarIcon
@@ -72,8 +72,8 @@ const AppNavigator = () => {
               />
             );
           },
-          tabBarActiveTintColor: "#ffffff",
-          tabBarInactiveTintColor: "#aaaaaa",
+          tabBarActiveTintColor: theme.text, 
+          tabBarInactiveTintColor: theme.textSecondary,
         })}
       >
         <Tab.Screen name="Store" component={StoreScreen} />
@@ -87,21 +87,12 @@ const AppNavigator = () => {
 };
 
 const styles = StyleSheet.create({
-
   avatar: {
     marginTop: 30,
     width: 30,
     height: 30,
     borderRadius: 50,
   },
-
-
 });
 
-
-
-
-
-
 export default AppNavigator;
-

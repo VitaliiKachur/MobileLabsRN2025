@@ -18,7 +18,7 @@ const SegmentedControl = ({ options = ["Open chats", "My friends"], selectedInde
       style={[
         styles.container,
         {
-          borderColor: theme.inputBackground,
+          borderColor: theme.inputBackground2,
           backgroundColor: "transparent",
         },
       ]}
@@ -27,7 +27,7 @@ const SegmentedControl = ({ options = ["Open chats", "My friends"], selectedInde
         const isActive = localSelectedIndex === index;
 
         const backgroundColor = isActive
-          ? theme.background
+          ? theme.background2
           : theme.inputBackground;
 
         const textColor = isActive
