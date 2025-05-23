@@ -1,5 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import {
+  GestureHandlerRootView,
+  TapGestureHandler,
+  LongPressGestureHandler,
+  PanGestureHandler,
+  FlingGestureHandler,
+  PinchGestureHandler,
+  State,
+} from 'react-native-gesture-handler';
 
 export default function App() {
   return (
