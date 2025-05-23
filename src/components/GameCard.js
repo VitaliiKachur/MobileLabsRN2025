@@ -120,7 +120,7 @@ const GameCard = ({
   const composedGesture = Gesture.Simultaneous(
     Gesture.Exclusive(doubleTap, singleTap),
     longPress,
-    Gesture.Exclusive(pan, flingRight, flingLeft), // Змінено тут
+    Gesture.Exclusive(pan, flingRight, flingLeft), 
     pinch
   );
 
