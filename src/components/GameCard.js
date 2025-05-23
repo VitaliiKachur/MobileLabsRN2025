@@ -28,7 +28,7 @@ const GameCard = ({
       { scale: scale.value * cardScale.value },
     ],
   }));
-git add src/components/GameCard.js
+
   const singleTap = Gesture.Tap()
     .numberOfTaps(1)
     .onEnd(() => {
@@ -62,15 +62,33 @@ git add src/components/GameCard.js
       runOnJS(onGesturePerformed)('longPress');
     });
 
-  const pan = Gesture.Pan()
+   const pan = Gesture.Pan()
     .onUpdate((event) => {
       translateX.value = event.translationX;
       translateY.value = event.translationY;
     })
-    .onEnd(() => {
+    .onEnd((event) => {
+      const velocityX = event.velocityX;
+      const velocityY = event.velocityY;
+      const absVelocityX = Math.abs(velocityX);
+      const absVelocityY = Math.abs(velocityY);
+      
+      if (absVelocityX > 1000 && absVelocityX > absVelocityY * 2) {
+        if (velocityX > 0) {
+          const randomPoints = Math.floor(Math.random() * (GESTURE_POINTS.FLING_MAX - GESTURE_POINTS.FLING_MIN + 1)) + GESTURE_POINTS.FLING_MIN;
+          runOnJS(onScoreChange)(randomPoints);
+          runOnJS(onGesturePerformed)('swipeRight');
+        } else {
+          const randomPoints = Math.floor(Math.random() * (GESTURE_POINTS.FLING_MAX - GESTURE_POINTS.FLING_MIN + 1)) + GESTURE_POINTS.FLING_MIN;
+          runOnJS(onScoreChange)(randomPoints);
+          runOnJS(onGesturePerformed)('swipeLeft');
+        }
+      } else {
+        runOnJS(onGesturePerformed)('drag');
+      }
+      
       translateX.value = withSpring(0);
       translateY.value = withSpring(0);
-      runOnJS(onGesturePerformed)('drag');
     });
 
   const flingRight = Gesture.Fling()
@@ -102,9 +120,7 @@ git add src/components/GameCard.js
   const composedGesture = Gesture.Simultaneous(
     Gesture.Exclusive(doubleTap, singleTap),
     longPress,
-    pan,
-    flingRight,
-    flingLeft,
+    Gesture.Exclusive(pan, flingRight, flingLeft), // Змінено тут
     pinch
   );
 

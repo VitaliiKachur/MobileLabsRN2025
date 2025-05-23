@@ -69,4 +69,4 @@ const AppNavigator = () => {
   );
 };
 
-export default AppNavigator;git add src/navigation/AppNavigator.js
+export default AppNavigator;

@@ -1,95 +1,97 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react'; 
 import { View, StyleSheet, Alert } from 'react-native';
 import GameCard from '../components/GameCard';
-import { INITIAL_TASKS } from '../utils/constants';
+import { useGame } from '../context/GameContext';
+import { useIsFocused } from '@react-navigation/native'; 
 
 const GameScreen = ({ navigation }) => {
-  const [score, setScore] = useState(0);
-  const [tasks, setTasks] = useState(INITIAL_TASKS);
-  const [progress, setProgress] = useState({
-    clicks: 0,
-    doubleClicks: 0,
-    longPress: 0,
-    drag: 0,
-    swipeRight: 0,
-    swipeLeft: 0,
-    pinch: 0,
-    score: 0,
-  });
+  const {
+    score,
+    tasks,
+    progress,
+    updateScore,
+    updateProgress,
+    updateTasks
+  } = useGame();
 
-  // Update score and progress
-  const handleScoreChange = (points) => {
-    const newScore = score + points;
-    setScore(newScore);
-    
-    setProgress(prev => ({
-      ...prev,
-      score: newScore,
-    }));
-  };
+  const isFocused = useIsFocused(); 
 
-  // Update gesture progress
+  const [allTasksCompletedAlertShown, setAllTasksCompletedAlertShown] = useState(false);
+
   const handleGesturePerformed = (gestureType) => {
-    setProgress(prevProgress => {
-      const newProgress = {
-        ...prevProgress,
-        [gestureType]: prevProgress[gestureType] + 1,
-      };
-      return newProgress;
-    });
+    updateProgress(gestureType);
   };
 
-  // Check and update completed tasks
   useEffect(() => {
-    setTasks(prevTasks => 
-      prevTasks.map(task => {
-        const currentProgress = progress[task.type] || 0;
-        const wasCompleted = task.completed;
-        const isNowCompleted = currentProgress >= task.target;
-        
-        // Show completion alert for newly completed tasks
-        if (!wasCompleted && isNowCompleted) {
-          setTimeout(() => {
-            Alert.alert(
-              '🎉 Завдання виконано!',
-              `Ви успішно виконали: "${task.title}"`,
-              [{ text: 'Чудово!', style: 'default' }]
-            );
-          }, 100);
-        }
-        
-        return {
-          ...task,
-          completed: isNowCompleted,
-        };
-      })
-    );
-  }, [progress]);
+    const updatedTasks = tasks.map(task => {
+      const currentProgress = progress[task.type] || 0;
+      const wasCompleted = task.completed;
+      const isNowCompleted = currentProgress >= task.target;
 
-  // Check if all tasks are completed
+      if (!wasCompleted && isNowCompleted) {
+        setTimeout(() => {
+          Alert.alert(
+            '🎉 Завдання виконано!',
+            `Ви успішно виконали: "${task.title}"`,
+            [{ text: 'Чудово!', style: 'default' }]
+          );
+        }, 100);
+      }
+
+      return {
+        ...task,
+        completed: isNowCompleted,
+      };
+    });
+
+    updateTasks(updatedTasks);
+  }, [progress]); 
+
   useEffect(() => {
-    const completedTasks = tasks.filter(task => task.completed).length;
-    const totalTasks = tasks.length;
-    
-    if (completedTasks === totalTasks && totalTasks > 0) {
+    const completedTasksCount = tasks.filter(task => task.completed).length;
+    const totalTasksCount = tasks.length;
+
+    if (completedTasksCount === totalTasksCount && totalTasksCount > 0 && !allTasksCompletedAlertShown) {
+      console.log('GameScreen: All tasks completed!');
+      
+      setAllTasksCompletedAlertShown(true); 
+
       setTimeout(() => {
         Alert.alert(
           '🏆 Вітаємо!',
           `Ви виконали всі завдання! Набрано очок: ${score}`,
           [
-            { text: 'Переглянути завдання', onPress: () => navigation.navigate('Tasks') },
-            { text: 'Продовжити гру', style: 'default' }
+            { 
+              text: 'Переглянути завдання', 
+              onPress: () => {
+                navigation.navigate('Tasks');
+              } 
+            },
+            { 
+              text: 'Продовжити гру', 
+              style: 'default', 
+              onPress: () => {
+              } 
+            }
           ]
         );
       }, 500);
     }
-  }, [tasks, score, navigation]);
+  }, [tasks, score, navigation, allTasksCompletedAlertShown]);
+
+  useEffect(() => {
+    const allTasksNotCompleted = tasks.every(task => !task.completed);
+    if (allTasksNotCompleted && allTasksCompletedAlertShown) {
+      setAllTasksCompletedAlertShown(false);
+    }
+  }, [tasks, allTasksCompletedAlertShown]);
+
 
   return (
     <View style={styles.container}>
       <GameCard
         score={score}
-        onScoreChange={handleScoreChange}
+        onScoreChange={updateScore}
         onGesturePerformed={handleGesturePerformed}
       />
     </View>

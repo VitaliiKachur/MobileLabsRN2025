@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { 
   View, 
   Text, 
@@ -8,56 +8,21 @@ import {
   RefreshControl 
 } from 'react-native';
 import TaskItem from '../components/TaskItem';
-import { INITIAL_TASKS } from '../utils/constants';
+import { useGame } from '../context/GameContext';
 
-const TasksScreen = ({ navigation }) => {
-  const [tasks, setTasks] = useState(INITIAL_TASKS);
-  const [progress, setProgress] = useState({
-    clicks: 0,
-    doubleClicks: 0,
-    longPress: 0,
-    drag: 0,
-    swipeRight: 0,
-    swipeLeft: 0,
-    pinch: 0,
-    score: 0,
-  });
+const TasksScreen = ({ navigation, route }) => {
+  const { tasks, progress } = useGame();
   const [refreshing, setRefreshing] = useState(false);
-
-  const updateProgressFromStorage = () => {
-    setProgress({
-      clicks: Math.floor(Math.random() * 15),
-      doubleClicks: Math.floor(Math.random() * 7),
-      longPress: Math.floor(Math.random() * 2),
-      drag: Math.floor(Math.random() * 2),
-      swipeRight: Math.floor(Math.random() * 2),
-      swipeLeft: Math.floor(Math.random() * 2),
-      pinch: Math.floor(Math.random() * 2),
-      score: Math.floor(Math.random() * 150),
-    });
-  };
-
-  useEffect(() => {
-    setTasks(prevTasks => 
-      prevTasks.map(task => ({
-        ...task,
-        completed: (progress[task.type] || 0) >= task.target,
-      }))
-    );
-  }, [progress]);
-
-  const onRefresh = () => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
-    updateProgressFromStorage();
     setTimeout(() => {
       setRefreshing(false);
-    }, 1000);
-  };
-
+    }, 500);
+  }, []);
 
   const completedTasks = tasks.filter(task => task.completed).length;
   const totalTasks = tasks.length;
-  const completionPercentage = Math.round((completedTasks / totalTasks) * 100);
+  const completionPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
   const renderTaskItem = ({ item }) => (
     <TaskItem task={item} progress={progress} />
@@ -94,6 +59,13 @@ const TasksScreen = ({ navigation }) => {
             ]} 
           />
         </View>
+      </View>
+      
+
+      <View style={styles.debugContainer}>
+        <Text style={styles.debugText}>
+          Debug: Score: {progress.score}, Clicks: {progress.clicks}, Double: {progress.doubleClicks}
+        </Text>
       </View>
     </View>
   );
@@ -185,6 +157,17 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#3b82f6',
     borderRadius: 4,
+  },
+  debugContainer: {
+    marginTop: 16,
+    padding: 12,
+    backgroundColor: '#f3f4f6',
+    borderRadius: 8,
+  },
+  debugText: {
+    fontSize: 12,
+    color: '#6b7280',
+    textAlign: 'center',
   },
   emptyContainer: {
     padding: 40,
