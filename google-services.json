@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "85326776556",
+    "project_id": "vitalii-6583e",
+    "storage_bucket": "vitalii-6583e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:85326776556:android:3d1ea0781ebd68b611fdc9",
+        "android_client_info": {
+          "package_name": "com.ztu.pushexaample"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsgfDvZIFaviVoeqVweuq5g-38BUWNdzo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
