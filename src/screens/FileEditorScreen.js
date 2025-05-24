@@ -11,7 +11,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { readTextFile, writeTextFile } from '../utils/filesSystem'; 
+import { readTextFile, writeTextFile, deleteItem } from '../utils/filesSystem'; 
 
 export default function FileEditorScreen({ navigation, route }) {
   const { filePath, fileName } = route.params;
@@ -19,6 +19,7 @@ export default function FileEditorScreen({ navigation, route }) {
   const [originalContent, setOriginalContent] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
   const handleSave = useCallback(async () => {
@@ -40,6 +41,46 @@ export default function FileEditorScreen({ navigation, route }) {
     }
     setSaving(false);
   }, [hasChanges, saving, filePath, content]);
+
+  const handleDelete = useCallback(() => {
+    Alert.alert(
+      'Видалення файлу',
+      `Ви впевнені, що хочете видалити файл "${fileName}"?\n\nЦю дію неможливо скасувати.`,
+      [
+        { text: 'Скасувати', style: 'cancel' },
+        { 
+          text: 'Видалити', 
+          style: 'destructive',
+          onPress: async () => {
+            setDeleting(true);
+            try {
+              const success = await deleteItem(filePath);
+              
+              if (success) {
+                Alert.alert(
+                  'Успіх', 
+                  'Файл видалено',
+                  [
+                    {
+                      text: 'OK',
+                      onPress: () => navigation.goBack()
+                    }
+                  ]
+                );
+              } else {
+                Alert.alert('Помилка', 'Не вдалося видалити файл');
+                setDeleting(false);
+              }
+            } catch (error) {
+              console.error('Error deleting file:', error);
+              Alert.alert('Помилка', 'Помилка при видаленні файлу');
+              setDeleting(false);
+            }
+          }
+        },
+      ]
+    );
+  }, [filePath, fileName, navigation]);
 
   const handleBack = useCallback(() => {
     if (hasChanges) {
@@ -79,21 +120,36 @@ export default function FileEditorScreen({ navigation, route }) {
         </TouchableOpacity>
       ),
       headerRight: () => (
-        <TouchableOpacity
-          onPress={handleSave}
-          disabled={!hasChanges || saving}
-        >
-          <Text style={[
-            styles.headerButtonText,
-            hasChanges && styles.saveButtonText,
-            (!hasChanges || saving) && styles.disabledText
-          ]}>
-            {saving ? 'Збереження...' : 'Зберегти'}
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.headerRightContainer}>
+          <TouchableOpacity
+            style={[styles.headerButton, styles.deleteHeaderButton]}
+            onPress={handleDelete}
+            disabled={deleting}
+          >
+            <Text style={[
+              styles.deleteButtonText,
+              deleting && styles.disabledText
+            ]}>
+              {deleting ? 'Видалення...' : 'Видалити'}
+            </Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity
+            onPress={handleSave}
+            disabled={!hasChanges || saving}
+          >
+            <Text style={[
+              styles.headerButtonText,
+              hasChanges && styles.saveButtonText,
+              (!hasChanges || saving) && styles.disabledText
+            ]}>
+              {saving ? 'Збереження...' : 'Зберегти'}
+            </Text>
+          </TouchableOpacity>
+        </View>
       ),
     });
-  }, [navigation, fileName, hasChanges, saving, handleBack, handleSave]);
+  }, [navigation, fileName, hasChanges, saving, deleting, handleBack, handleSave, handleDelete]);
 
   useEffect(() => {
     loadFileContent();
@@ -128,6 +184,15 @@ export default function FileEditorScreen({ navigation, route }) {
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#007AFF" />
         <Text style={styles.loadingText}>Завантаження файлу...</Text>
+      </View>
+    );
+  }
+
+  if (deleting) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#FF3B30" />
+        <Text style={styles.loadingText}>Видалення файлу...</Text>
       </View>
     );
   }
@@ -175,6 +240,22 @@ export default function FileEditorScreen({ navigation, route }) {
           onPress={handleBack}
         >
           <Text style={styles.footerButtonText}>Назад</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity
+          style={[
+            styles.footerButton,
+            styles.deleteFooterButton,
+          ]}
+          onPress={handleDelete}
+          disabled={deleting}
+        >
+          <Text style={[
+            styles.deleteFooterButtonText,
+            deleting && styles.disabledButtonText
+          ]}>
+            {deleting ? 'Видалення...' : 'Видалити'}
+          </Text>
         </TouchableOpacity>
         
         <TouchableOpacity
@@ -266,13 +347,16 @@ const styles = StyleSheet.create({
   footerButton: {
     flex: 1,
     paddingVertical: 12,
-    marginHorizontal: 8,
+    marginHorizontal: 4,
     borderRadius: 8,
     alignItems: 'center',
     backgroundColor: '#f0f0f0',
   },
   saveFooterButton: {
     backgroundColor: '#4CAF50',
+  },
+  deleteFooterButton: {
+    backgroundColor: '#FF3B30',
   },
   disabledButton: {
     backgroundColor: '#e0e0e0',
@@ -287,11 +371,23 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '500',
   },
+  deleteFooterButtonText: {
+    fontSize: 16,
+    color: 'white',
+    fontWeight: '500',
+  },
   disabledButtonText: {
     color: '#999',
   },
+  headerRightContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   headerButton: {
     paddingHorizontal: 16,
+  },
+  deleteHeaderButton: {
+    marginRight: 8,
   },
   saveButton: {
     backgroundColor: '#4CAF50',
@@ -302,6 +398,11 @@ const styles = StyleSheet.create({
   headerButtonText: {
     fontSize: 16,
     color: '#007AFF',
+    fontWeight: '500',
+  },
+  deleteButtonText: {
+    fontSize: 16,
+    color: '#FF3B30',
     fontWeight: '500',
   },
   saveButtonText: {

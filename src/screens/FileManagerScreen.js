@@ -20,7 +20,6 @@ import {
   isTextFile,
 }  from '../utils/filesSystem';
 
-
 export default function FileManagerScreen({ navigation, route }) {
   const [currentPath, setCurrentPath] = useState(APP_DATA_DIR);
   const [items, setItems] = useState([]);
@@ -38,8 +37,13 @@ export default function FileManagerScreen({ navigation, route }) {
 
   const loadDirectory = async () => {
     setLoading(true);
-    const contents = await getDirectoryContents(currentPath);
-    setItems(contents);
+    try {
+      const contents = await getDirectoryContents(currentPath);
+      setItems(contents);
+    } catch (error) {
+      console.error('Error loading directory:', error);
+      Alert.alert('Помилка', 'Не вдалося завантажити вміст папки');
+    }
     setLoading(false);
   };
 
@@ -102,9 +106,14 @@ export default function FileManagerScreen({ navigation, route }) {
   };
 
   const confirmDelete = (item) => {
+    const itemType = item.isDirectory ? 'папку' : 'файл';
+    const message = item.isDirectory 
+      ? `Ви впевнені, що хочете видалити папку "${item.name}" та весь її вміст?\n\nЦю дію неможливо скасувати.`
+      : `Ви впевнені, що хочете видалити файл "${item.name}"?\n\nЦю дію неможливо скасувати.`;
+
     Alert.alert(
-      'Підтвердження видалення',
-      `Ви впевнені, що хочете видалити "${item.name}"?`,
+      `Видалення ${itemType}`,
+      message,
       [
         { text: 'Скасувати', style: 'cancel' },
         {
@@ -117,23 +126,35 @@ export default function FileManagerScreen({ navigation, route }) {
   };
 
   const handleDelete = async (item) => {
-    const success = await deleteItem(item.uri);
-    if (success) {
-      loadDirectory();
-      Alert.alert('Успіх', `"${item.name}" видалено`);
-    } else {
-      Alert.alert('Помилка', 'Не вдалося видалити елемент');
+    const itemType = item.isDirectory ? 'папку' : 'файл';
+    
+    try {
+      const success = await deleteItem(item.uri);
+      if (success) {
+        await loadDirectory(); 
+        Alert.alert('Успіх', `${itemType.charAt(0).toUpperCase() + itemType.slice(1)} видалено`);
+      } else {
+        Alert.alert('Помилка', `Не вдалося видалити ${itemType}`);
+      }
+    } catch (error) {
+      console.error('Error deleting item:', error);
+      Alert.alert('Помилка', `Помилка при видаленні ${itemType}`);
     }
   };
 
   const handleCreateFolder = async (folderName) => {
-    const success = await createDirectory(currentPath, folderName);
-    if (success) {
-      setShowCreateFolderModal(false);
-      loadDirectory();
-      Alert.alert('Успіх', `Папка "${folderName}" створена`);
-    } else {
-      Alert.alert('Помилка', 'Не вдалося створити папку');
+    try {
+      const success = await createDirectory(currentPath, folderName);
+      if (success) {
+        setShowCreateFolderModal(false);
+        await loadDirectory();
+        Alert.alert('Успіх', `Папка "${folderName}" створена`);
+      } else {
+        Alert.alert('Помилка', 'Не вдалося створити папку');
+      }
+    } catch (error) {
+      console.error('Error creating folder:', error);
+      Alert.alert('Помилка', 'Помилка при створенні папки');
     }
   };
 
@@ -148,14 +169,19 @@ export default function FileManagerScreen({ navigation, route }) {
   };
 
   const handleCreateFileStep2 = async (content) => {
-    const success = await createTextFile(currentPath, newFileName, content);
-    if (success) {
-      setShowFileContentModal(false);
-      setNewFileName('');
-      loadDirectory();
-      Alert.alert('Успіх', `Файл "${newFileName}" створено`);
-    } else {
-      Alert.alert('Помилка', 'Не вдалося створити файл');
+    try {
+      const success = await createTextFile(currentPath, newFileName, content);
+      if (success) {
+        setShowFileContentModal(false);
+        setNewFileName('');
+        await loadDirectory();
+        Alert.alert('Успіх', `Файл "${newFileName}" створено`);
+      } else {
+        Alert.alert('Помилка', 'Не вдалося створити файл');
+      }
+    } catch (error) {
+      console.error('Error creating file:', error);
+      Alert.alert('Помилка', 'Помилка при створенні файлу');
     }
   };
 
