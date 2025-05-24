@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -8,8 +8,10 @@ import {
   ActivityIndicator,
   Alert,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
-import { readTextFile, writeTextFile }  from '../utils/filesSystem';
+import { readTextFile, writeTextFile } from '../utils/filesSystem'; 
 
 export default function FileEditorScreen({ navigation, route }) {
   const { filePath, fileName } = route.params;
@@ -19,69 +21,27 @@ export default function FileEditorScreen({ navigation, route }) {
   const [saving, setSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
-  useEffect(() => {
-    navigation.setOptions({
-      title: `Редагування: ${fileName}`,
-      headerLeft: () => (
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={handleBack}
-        >
-          <Text style={styles.headerButtonText}>Назад</Text>
-        </TouchableOpacity>
-      ),
-      headerRight: () => (
-        <TouchableOpacity
-          style={[styles.headerButton, hasChanges && styles.saveButton]}
-          onPress={handleSave}
-          disabled={!hasChanges || saving}
-        >
-          <Text style={[
-            styles.headerButtonText,
-            hasChanges && styles.saveButtonText,
-            (!hasChanges || saving) && styles.disabledText
-          ]}>
-            {saving ? 'Збереження...' : 'Зберегти'}
-          </Text>
-        </TouchableOpacity>
-      ),
-    });
-
-    loadFileContent();
-  }, [filePath, fileName, navigation, hasChanges, saving]);
-
-  useEffect(() => {
-    setHasChanges(content !== originalContent);
-  }, [content, originalContent]);
-
-  const loadFileContent = async () => {
-    setLoading(true);
-    const fileContent = await readTextFile(filePath);
-    if (fileContent !== null) {
-      setContent(fileContent);
-      setOriginalContent(fileContent);
-    } else {
-      Alert.alert('Помилка', 'Не вдалося прочитати файл');
-    }
-    setLoading(false);
-  };
-
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (!hasChanges || saving) return;
 
     setSaving(true);
-    const success = await writeTextFile(filePath, content);
-    
-    if (success) {
-      setOriginalContent(content);
-      Alert.alert('Успіх', 'Файл збережено');
-    } else {
-      Alert.alert('Помилка', 'Не вдалося зберегти файл');
+    try {
+      const success = await writeTextFile(filePath, content);
+      
+      if (success) {
+        setOriginalContent(content);
+        Alert.alert('Успіх', 'Файл збережено');
+      } else {
+        Alert.alert('Помилка', 'Не вдалося зберегти файл');
+      }
+    } catch (error) {
+      console.error('Error saving file:', error);
+      Alert.alert('Помилка', 'Помилка при збереженні файлу');
     }
     setSaving(false);
-  };
+  }, [hasChanges, saving, filePath, content]);
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     if (hasChanges) {
       Alert.alert(
         'Незбережені зміни',
@@ -105,6 +65,62 @@ export default function FileEditorScreen({ navigation, route }) {
     } else {
       navigation.goBack();
     }
+  }, [hasChanges, handleSave, navigation]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: `Редагування: ${fileName}`,
+      headerLeft: () => (
+        <TouchableOpacity
+          style={styles.headerButton}
+          onPress={handleBack}
+        >
+          <Text style={styles.headerButtonText}>Назад</Text>
+        </TouchableOpacity>
+      ),
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={handleSave}
+          disabled={!hasChanges || saving}
+        >
+          <Text style={[
+            styles.headerButtonText,
+            hasChanges && styles.saveButtonText,
+            (!hasChanges || saving) && styles.disabledText
+          ]}>
+            {saving ? 'Збереження...' : 'Зберегти'}
+          </Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation, fileName, hasChanges, saving, handleBack, handleSave]);
+
+  useEffect(() => {
+    loadFileContent();
+  }, [filePath]);
+
+  useEffect(() => {
+    setHasChanges(content !== originalContent && originalContent !== '');
+  }, [content, originalContent]);
+
+  const loadFileContent = async () => {
+    setLoading(true);
+    try {
+      console.log('Loading file from path:', filePath); 
+      const fileContent = await readTextFile(filePath);
+      console.log('File content loaded:', fileContent !== null);
+      
+      if (fileContent !== null) {
+        setContent(fileContent);
+        setOriginalContent(fileContent);
+      } else {
+        Alert.alert('Помилка', 'Не вдалося прочитати файл');
+      }
+    } catch (error) {
+      console.error('Error loading file:', error);
+      Alert.alert('Помилка', 'Помилка при завантаженні файлу: ' + error.message);
+    }
+    setLoading(false);
   };
 
   if (loading) {
@@ -117,7 +133,10 @@ export default function FileEditorScreen({ navigation, route }) {
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <View style={styles.header}>
         <Text style={styles.fileName}>📝 {fileName}</Text>
         <View style={styles.statusContainer}>
@@ -129,17 +148,25 @@ export default function FileEditorScreen({ navigation, route }) {
       </View>
       
       <View style={styles.editorContainer}>
-        <ScrollView style={styles.scrollContainer}>
-          <TextInput
-            style={styles.textInput}
-            value={content}
-            onChangeText={setContent}
-            multiline
-            placeholder="Введіть текст..."
-            placeholderTextColor="#999"
-            textAlignVertical="top"
-          />
-        </ScrollView>
+        <TextInput
+          style={styles.textInput}
+          value={content}
+          onChangeText={(text) => {
+            console.log('Text changed, length:', text.length); 
+            setContent(text);
+          }}
+          multiline
+          placeholder="Введіть текст..."
+          placeholderTextColor="#999"
+          textAlignVertical="top"
+          scrollEnabled={true}
+          showsVerticalScrollIndicator={true}
+          editable={true} 
+          selectTextOnFocus={false}
+          blurOnSubmit={false}
+          onFocus={() => console.log('TextInput focused')}
+          onBlur={() => console.log('TextInput blurred')}
+        />
       </View>
       
       <View style={styles.footer}>
@@ -167,7 +194,7 @@ export default function FileEditorScreen({ navigation, route }) {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -217,19 +244,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     margin: 16,
     borderRadius: 8,
-    padding: 0,
-    overflow: 'hidden',
-  },
-  scrollContainer: {
-    flex: 1,
+    padding: 16,
   },
   textInput: {
     flex: 1,
     fontSize: 16,
     lineHeight: 24,
     color: '#333',
-    fontFamily: 'monospace',
-    padding: 16,
+    fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
+    textAlignVertical: 'top',
+    paddingTop: 0,
     minHeight: 200,
   },
   footer: {
