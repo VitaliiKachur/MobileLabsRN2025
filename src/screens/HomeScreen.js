@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { getStorageInfo, formatBytes, initializeAppDataDirectory } from 'utils/fileSystem';
+import { getStorageInfo, formatBytes, initializeAppDataDirectory } from '../utils/filesSystem';
 
 export default function HomeScreen({ navigation }) {
   const [storageInfo, setStorageInfo] = useState(null);

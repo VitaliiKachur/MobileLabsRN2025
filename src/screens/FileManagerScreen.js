@@ -18,7 +18,7 @@ import {
   createTextFile,
   deleteItem,
   isTextFile,
-} from utils/fileSystem;
+}  from '../utils/filesSystem';
 
 
 export default function FileManagerScreen({ navigation, route }) {

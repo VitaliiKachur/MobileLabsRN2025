@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { formatBytes, getFileExtension }  from 'utils/fileSystem';
+import { formatBytes, getFileExtension }   from '../utils/filesSystem';
 
 export default function FileItem({ item, onPress, onLongPress }) {
   const getFileIcon = () => {

@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { readTextFile } from utils/fileSystem;
+import { readTextFile }  from '../utils/filesSystem';
 
 export default function FileViewerScreen({ navigation, route }) {
   const { filePath, fileName } = route.params;

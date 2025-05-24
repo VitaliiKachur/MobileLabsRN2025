@@ -9,7 +9,7 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
-import { readTextFile, writeTextFile } from utils/fileSystem;
+import { readTextFile, writeTextFile }  from '../utils/filesSystem';
 
 export default function FileEditorScreen({ navigation, route }) {
   const { filePath, fileName } = route.params;

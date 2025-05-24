@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { formatBytes, getFileExtension } from utils/fileSystem;
+import { formatBytes, getFileExtension }  from '../utils/filesSystem';
 
 export default function FileInfoScreen({ navigation, route }) {
   const { fileItem } = route.params;
