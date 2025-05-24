@@ -9,7 +9,7 @@ export const useRemindersStorage = () => {
       const storedReminders = await AsyncStorage.getItem("reminders");
       if (storedReminders) {
         const parsedReminders = JSON.parse(storedReminders);
-        parsedReminders.sort((a, b) => new Date(a.date) - new Date(b.date));
+        parsedReminders.sort((a, b) => new Date(b.date) - new Date(a.date));
         setReminders(parsedReminders);
       }
     } catch (error) {
@@ -19,7 +19,7 @@ export const useRemindersStorage = () => {
 
   const saveReminders = async (currentReminders) => {
     try {
-      currentReminders.sort((a, b) => new Date(a.date) - new Date(b.date));
+      currentReminders.sort((a, b) => new Date(b.date) - new Date(a.date));
       await AsyncStorage.setItem("reminders", JSON.stringify(currentReminders));
     } catch (error) {
       console.error("Error saving reminders to storage:", error);
