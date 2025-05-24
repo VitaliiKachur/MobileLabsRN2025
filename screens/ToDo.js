@@ -1,13 +1,12 @@
 import React from "react";
 import { View, Text, Image } from "react-native";
 import AddTaskForm from "../components/AddTask";
-import RemindersList from "../components/TasksList"; // Шлях до RemindersList
+import RemindersList from "../components/TasksList"; 
 import AppLogo from '../assets/foto.png';
 
-// Імпортуємо нові хуки та сервіси
 import { useRemindersStorage } from "../hooks/useRemindersStorage";
 import { scheduleNotification, cancelScheduledNotification } from "../services/oneSignalService";
-import { ToDoStyles as styles } from "../styles/ToDoStyles"; // Імпортуємо стилі
+import { ToDoStyles as styles } from "../styles/ToDoStyles"; 
 
 const ToDo = () => {
   const { reminders, setReminders } = useRemindersStorage();
