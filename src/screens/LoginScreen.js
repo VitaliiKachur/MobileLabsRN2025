@@ -44,7 +44,7 @@ const LoginScreen = ({ navigation }) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <View style={styles.formContainer}>
-        <Text style={styles.title}>Welcome Back</Text>
+        <Text style={styles.title}>Welcome Lab7</Text>
         <Text style={styles.subtitle}>Sign in to your account</Text>
 
         <TextInput
