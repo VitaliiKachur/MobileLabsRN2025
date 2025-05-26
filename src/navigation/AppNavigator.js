@@ -2,7 +2,8 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ProductListScreen from '../screens/ProductListScreen';
 import CartScreen from '../screens/CartScreen';
-import { TouchableOpacity, Text, StyleSheet, View } from 'react-native'; 
+import CheckoutScreen from '../screens/CheckoutScreen'; 
+import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
@@ -46,7 +47,22 @@ const AppNavigator = () => {
       <Stack.Screen
         name="Cart"
         component={CartScreen}
-        options={{ title: 'Ваш кошик' }}
+        options={({ navigation }) => ({
+          title: 'Ваш кошик',
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Checkout')}
+              style={{ padding: 5 }}
+            >
+              <Text style={{ color: '#007bff', fontWeight: 'bold' }}>Оформити</Text>
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="Checkout"
+        component={CheckoutScreen}
+        options={{ title: 'Завершити замовлення' }}
       />
     </Stack.Navigator>
   );
