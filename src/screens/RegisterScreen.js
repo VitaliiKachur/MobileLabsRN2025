@@ -43,7 +43,6 @@ const RegisterScreen = ({ navigation }) => {
     setIsLoading(false);
 
     if (!result.success) {
-      // Error handling is done in AuthContext
       console.log('Registration failed');
     }
   };

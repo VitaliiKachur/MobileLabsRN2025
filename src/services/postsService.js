@@ -1,7 +1,6 @@
 import api from './api';
 
 export const postsService = {
-  // Get all posts for a user
   async getPosts(userId) {
     try {
       const response = await api.get(`/users/${userId}/posts.json`);
@@ -11,7 +10,6 @@ export const postsService = {
         return [];
       }
       
-      // Convert object to array with keys as ids
       const posts = Object.keys(postsData).map(key => ({
         id: key,
         ...postsData[key]
@@ -24,7 +22,6 @@ export const postsService = {
     }
   },
 
-  // Create a new post
   async createPost(userId, postData) {
     try {
       const newPost = {
@@ -45,7 +42,6 @@ export const postsService = {
     }
   },
 
-  // Update an existing post
   async updatePost(userId, postId, postData) {
     try {
       const updatedPost = {
@@ -65,7 +61,6 @@ export const postsService = {
     }
   },
 
-  // Delete a post
   async deletePost(userId, postId) {
     try {
       await api.delete(`/users/${userId}/posts/${postId}.json`);
@@ -76,7 +71,6 @@ export const postsService = {
     }
   },
 
-  // Get a single post
   async getPost(userId, postId) {
     try {
       const response = await api.get(`/users/${userId}/posts/${postId}.json`);

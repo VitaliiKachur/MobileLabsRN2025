@@ -169,14 +169,16 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ddd',
   },
   headerTitle: {
+     marginTop:20,
     fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
   },
   logoutButton: {
-    paddingHorizontal: 15,
+  marginTop:20,
+    paddingHorizontal: 25,
     paddingVertical: 8,
-    backgroundColor: '#dc3545',
+    backgroundColor: 'rgb(0, 128, 0)',
     borderRadius: 5,
   },
   logoutButtonText: {

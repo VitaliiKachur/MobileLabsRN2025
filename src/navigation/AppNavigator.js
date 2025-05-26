@@ -8,6 +8,7 @@ import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import PostsScreen from '../screens/PostsScreen';
 import CreatePostScreen from '../screens/CreatePostScreen';
+import ProfileScreen from '../screens/ProfileScreen'; 
 
 const Stack = createStackNavigator();
 
@@ -25,18 +26,32 @@ const AuthStack = () => (
 const MainStack = () => (
   <Stack.Navigator
     screenOptions={{
-      headerShown: false,
+      headerShown: false, 
     }}
   >
     <Stack.Screen name="Posts" component={PostsScreen} />
-    <Stack.Screen 
-      name="CreatePost" 
+    <Stack.Screen
+      name="CreatePost"
       component={CreatePostScreen}
       options={{
         headerShown: true,
         headerTitle: '',
         headerStyle: {
           backgroundColor: '#fff',
+          shadowColor: 'transparent',
+          elevation: 0,
+        },
+        headerTintColor: '#007bff',
+      }}
+    />
+    <Stack.Screen 
+      name="Profile"
+      component={ProfileScreen}
+      options={{
+        headerShown: true, 
+        headerTitle: 'Мій Профіль',
+        headerStyle: {
+          backgroundColor: '#f5f5f5',
           shadowColor: 'transparent',
           elevation: 0,
         },

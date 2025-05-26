@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
 
       setUserToken(token);
       setUserId(localId);
-      
+
       return { success: true };
     } catch (error) {
       console.error("Login error:", error.response?.data || error.message);
@@ -62,7 +62,6 @@ export const AuthProvider = ({ children }) => {
       await AsyncStorage.setItem("userToken", idToken);
       await AsyncStorage.setItem("userId", localId);
 
-      // Save user profile to database
       await api.put(`/users/${localId}.json`, {
         name,
         email,
@@ -71,7 +70,7 @@ export const AuthProvider = ({ children }) => {
 
       setUserToken(idToken);
       setUserId(localId);
-      
+
       return { success: true };
     } catch (error) {
       console.error("Registration error:", error.response?.data || error.message);
@@ -87,7 +86,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const token = await AsyncStorage.getItem("userToken");
       const storedUserId = await AsyncStorage.getItem("userId");
-      
+
       if (token && storedUserId) {
         setUserToken(token);
         setUserId(storedUserId);
@@ -107,6 +106,7 @@ export const AuthProvider = ({ children }) => {
       setUserId(null);
     } catch (error) {
       console.error("Logout error:", error);
+      Alert.alert('Помилка', 'Не вдалося вийти з облікового запису.');
     }
   };
 
@@ -116,14 +116,14 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ 
-        userToken, 
-        userId, 
-        isLoading, 
-        login, 
-        logout, 
+      value={{
+        userToken,
+        userId,
+        isLoading,
+        login,
+        logout,
         register,
-        isAuthenticated: !!userToken 
+        isAuthenticated: !!userToken
       }}
     >
       {children}
