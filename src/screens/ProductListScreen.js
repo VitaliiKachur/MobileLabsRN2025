@@ -1,9 +1,16 @@
 import React from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { addToCart } from '../store/slices/cartSlice'; 
 
 const ProductListScreen = () => {
   const products = useSelector((state) => state.products.items);
+  const dispatch = useDispatch();
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+    console.log('Додано до кошика:', product.name);
+  };
 
   const renderProductItem = ({ item }) => (
     <View style={styles.productCard}>
@@ -12,7 +19,7 @@ const ProductListScreen = () => {
         <Text style={styles.productName}>{item.name}</Text>
         <Text style={styles.productDescription}>{item.description}</Text>
         <Text style={styles.productPrice}>${item.price.toFixed(2)}</Text>
-        <TouchableOpacity style={styles.addToCartButton} onPress={() => console.log('Додати до кошика:', item.id)}>
+        <TouchableOpacity style={styles.addToCartButton} onPress={() => handleAddToCart(item)}>
           <Text style={styles.addToCartButtonText}>Додати до кошика</Text>
         </TouchableOpacity>
       </View>

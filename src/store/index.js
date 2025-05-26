@@ -11,15 +11,17 @@ import {
 } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import productsReducer from './slices/productsSlice';
+import cartReducer from './slices/cartSlice'; 
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['cart', 'orders'],
+  whitelist: ['cart', 'orders'], 
 };
 
 const rootReducer = combineReducers({
   products: productsReducer,
+  cart: cartReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
