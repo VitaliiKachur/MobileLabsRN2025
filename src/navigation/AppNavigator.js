@@ -2,7 +2,8 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ProductListScreen from '../screens/ProductListScreen';
 import CartScreen from '../screens/CartScreen';
-import CheckoutScreen from '../screens/CheckoutScreen'; 
+import CheckoutScreen from '../screens/CheckoutScreen';
+import OrderHistoryScreen from '../screens/OrderHistoryScreen';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
@@ -31,16 +32,35 @@ const styles = StyleSheet.create({
   cartText: {
     fontWeight: 'bold',
   },
+  headerButton: {
+    padding: 5,
+    marginRight: 15,
+  },
+  headerButtonText: {
+    color: '#007bff',
+    fontWeight: 'bold',
+  }
 });
 
 const AppNavigator = () => {
+  const navigation = useNavigation();
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Products"
         component={ProductListScreen}
         options={{
-          headerRight: () => <CartIcon />,
+          headerRight: () => (
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity
+                style={styles.headerButton}
+                onPress={() => navigation.navigate('OrderHistory')}
+              >
+                <Text style={styles.headerButtonText}>Історія</Text>
+              </TouchableOpacity>
+              <CartIcon />
+            </View>
+          ),
           title: 'Каталог товарів',
         }}
       />
@@ -63,6 +83,11 @@ const AppNavigator = () => {
         name="Checkout"
         component={CheckoutScreen}
         options={{ title: 'Завершити замовлення' }}
+      />
+      <Stack.Screen
+        name="OrderHistory"
+        component={OrderHistoryScreen}
+        options={{ title: 'Історія замовлень' }}
       />
     </Stack.Navigator>
   );
