@@ -3,7 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart, updateQuantity } from '../store/slices/cartSlice';
 
-const CartScreen = () => {
+const CartScreen = ({ navigation }) => {
   const cartItems = useSelector((state) => state.cart.items);
   const totalAmount = useSelector((state) => state.cart.totalAmount);
   const dispatch = useDispatch();
@@ -17,6 +17,12 @@ const CartScreen = () => {
       dispatch(removeFromCart(id));
     } else {
       dispatch(updateQuantity({ id, quantity: newQuantity }));
+    }
+  };
+
+  const handleCheckout = () => {
+    if (cartItems.length > 0) {
+      navigation.navigate('Checkout');
     }
   };
 
@@ -68,8 +74,9 @@ const CartScreen = () => {
           <View style={styles.summaryContainer}>
             <Text style={styles.totalAmount}>Всього: ${totalAmount.toFixed(2)}</Text>
             <TouchableOpacity
-              style={styles.checkoutButton}
-              onPress={() => console.log('Перейти до оформлення замовлення')}
+              style={[styles.checkoutButton, cartItems.length === 0 && styles.disabledButton]}
+              onPress={handleCheckout}
+              disabled={cartItems.length === 0}
             >
               <Text style={styles.checkoutButtonText}>Оформити замовлення</Text>
             </TouchableOpacity>
@@ -188,6 +195,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: '100%',
     alignItems: 'center',
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
   },
   checkoutButtonText: {
     color: '#fff',

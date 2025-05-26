@@ -1,46 +1,48 @@
+import { createSlice } from '@reduxjs/toolkit';
+
 const initialState = {
   items: [
     {
       id: '1',
       name: 'iPhone 15 Pro',
-      description: 'The latest iPhone with a powerful A17 Bionic chip.',
-      price: 1099,
-      image: 'https://images.unsplash.com/photo-1695420239403-ec561f2518e3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      description: 'Мобільний телефон Apple iPhone 15 128GB Black (MTP03RX/A)',
+      price: 55999,
+      image: 'https://apple-mania.com.ua/media/catalog/product/cache/e026f651b05122a6916299262b60c47d/i/p/iphone-15-pro-finish-select-202309-6-7inch-bluetitanium.webp',
     },
     {
       id: '2',
       name: 'Samsung Galaxy S24 Ultra',
-      description: 'Top-tier Android phone with S Pen and amazing camera.',
-      price: 1199,
-      image: 'https://images.unsplash.com/photo-1707010405230-580790f9b31d?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      description: 'Смартфон Samsung Galaxy S24 8/256Gb Onyx Black (SM-S921BZKGEUC)',
+      price: 47499,
+      image: 'https://images.samsung.com/ua/smartphones/galaxy-s25-ultra/buy/04_Color-Selection/04_1_Basic-Color/Color-Selection_Titanium-Gray_PC.png?imbypass=trueD',
     },
     {
       id: '3',
       name: 'Google Pixel 8 Pro',
-      description: 'Best of Android with AI-powered features and great camera.',
-      price: 999,
-      image: 'https://images.unsplash.com/photo-1698242478546-17b07096d2a4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      description: 'Мобільний телефон Google Pixel 8 Pro 12/128GB Obsidian (0840244705046)',
+      price: 32000,
+      image: 'https://cdn.kalvo.com/uploads/img/gallery/56045-google-pixel-8-pro-2.jpg',
     },
     {
       id: '4',
       name: 'AirPods Pro 2nd Gen',
-      description: 'Advanced noise cancellation and transparency mode.',
-      price: 249,
-      image: 'https://images.unsplash.com/photo-1634599522934-118817551000?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      description: 'AirPods Pro 2 with MagSafe Case (USB‑C) (MTJV3) (2023)',
+      price: 12888,
+      image: 'https://img.jabko.ua/image/cache/catalog/products/2022/09/072342/MQD83%20(1)-1397x1397.jpg.webp',
     },
     {
       id: '5',
       name: 'USB-C Fast Charger',
-      description: '20W USB-C power adapter for quick charging.',
-      price: 25,
-      image: 'https://images.unsplash.com/photo-1602758102434-d2e5b7c7b7b1?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      description: 'Зарядний комплект 120W Fast Charger Adapter USB/Type C Note 9 Pro, Note 10, Redmi 10, Note 11, Poco X3, Poco M4, Redmi Note 13, Redmi 12 для Xiaomi 10V/12A',
+      price: 450,
+      image: 'https://content.rozetka.com.ua/goods/images/big/499036633.jpg',
     },
-     {
+    {
       id: '6',
-      name: 'Smartphone Tripod',
-      description: 'Portable tripod with phone holder for stable shots.',
-      price: 15,
-      image: 'https://images.unsplash.com/photo-1549448332-9c991a04d262?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      name: 'XIAOMI 15 12/512GB Black',
+      description: 'Смартфон XIAOMI 15 12/512GB Black. Xiaomi 15 створений, щоб протистояти випробуванням повсякденного життя.',
+      price: 40999,
+      image: 'https://files.foxtrot.com.ua/PhotoNew/img_0_60_10740_0_1_KeDBIR.jpg',
     },
   ],
 };
@@ -48,7 +50,12 @@ const initialState = {
 const productsSlice = createSlice({
   name: 'products',
   initialState,
-  reducers: {},
+  reducers: {
+    setProducts: (state, action) => {
+      state.items = action.payload;
+    },
+  },
 });
 
+export const { setProducts } = productsSlice.actions;
 export default productsSlice.reducer;

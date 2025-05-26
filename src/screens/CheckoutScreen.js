@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserDetails } from '../store/slices/userSlice';
 import { clearCart } from '../store/slices/cartSlice';
+import { addOrder } from '../store/slices/ordersSlice'; 
 
 const CheckoutScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -32,15 +33,27 @@ const CheckoutScreen = ({ navigation }) => {
   const handleConfirmOrder = () => {
     if (validateForm()) {
       dispatch(setUserDetails({ name, email }));
+      dispatch(addOrder({
+        items: cartItems,
+        totalAmount: totalAmount
+      }));
+      
       Alert.alert(
         'Замовлення підтверджено!',
         `Дякуємо, ${name}! Ваше замовлення на загальну суму $${totalAmount.toFixed(2)} розміщено.`,
         [
           {
-            text: 'ОК',
+            text: 'Переглянути історію',
             onPress: () => {
               dispatch(clearCart());
-              navigation.navigate('Products'); 
+              navigation.navigate('OrderHistory');
+            },
+          },
+          {
+            text: 'Продовжити покупки',
+            onPress: () => {
+              dispatch(clearCart());
+              navigation.navigate('Products');
             },
           },
         ]
